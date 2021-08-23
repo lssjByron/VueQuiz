@@ -2,17 +2,18 @@
     <div class="question-box-container">
         <b-jumbotron>
             <template #lead>
-                <div v-if="currentQuestion">{{ currentQuestion.question}}</div>
+                <div>{{ currentQuestion.question}}</div>
             </template>
 
             <hr class="my-4">
-
-            <p>
-                List of answers
-            </p>
+            <b-list-group>
+                <b-list-group-item v-for="(answer, index) in answers" :key="index">
+                    {{ answer }}
+                </b-list-group-item>
+            </b-list-group>
 
             <b-button variant="primary" href="#">Submit</b-button>
-            <b-button variant="success" href="#">Next</b-button>
+            <b-button @click="next" variant="success" href="#">Next</b-button>
         </b-jumbotron>
     </div>
 </template>
@@ -21,7 +22,27 @@
 
 export default {
     props: {
-        currentQuestion: Object        
+        currentQuestion: Object,
+        next: Function
+    },
+    computed:{
+        answers() {
+            let answers = [...this.currentQuestion.incorrect_answers]
+            answers.push(this.currentQuestion.correct_answer)
+            return answers
+        }
+    },
+    mounted() {
+        console.log(this.currentQuestion)
     }
 }
 </script>
+
+<style scoped>
+.list-group {
+    margin-bottom: 15px;
+}
+.btn {
+    margin: 0 5px;
+}
+</style>
